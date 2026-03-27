@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SecurTrack GPS | Protección Vehicular PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: #0f172a;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url('https://images.unsplash.com/photo-1600320254374-ce2d293c324e') center/cover no-repeat;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 22px;
+  margin-bottom: 25px;
+}
+
+.btn {
+  background: #22c55e;
+  padding: 18px 35px;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #16a34a;
+}
+
+/* SECCIONES */
+.section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.feature {
+  background: #1e293b;
+  margin: 15px;
+  padding: 25px 20px;
+  border-radius: 12px;
+  width: 300px;
+  transition: 0.3s;
+}
+
+.feature:hover {
+  transform: scale(1.05);
+  background: #334155;
+}
+
+/* MAPA LEAFLET */
+#map {
+  height: 500px;
+  border-radius: 12px;
+  margin: 40px auto;
+  max-width: 1000px;
+}
+
+/* INFO GPS */
+.info-gps {
+  background: #0f172a;
+  padding: 60px 20px;
+  border-radius: 10px;
+  max-width: 900px;
+  margin: 40px auto;
+  text-align: left;
+}
+
+.info-gps h2 {
+  color: #22c55e;
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.info-gps p, .info-gps li {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* FOOTER */
+footer {
+  background: #020617;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* WHATSAPP */
+.whatsapp-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.whatsapp {
+  background: #25D366;
+  padding: 15px;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+.whatsapp img {
+  width: 32px;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background: black;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ANIMACIÓN PULSE */
+@keyframes pulse {
+  0% {transform: scale(1);}
+  50% {transform: scale(1.1);}
+  100% {transform: scale(1);}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Protege tu vehículo en todo Perú</h1>
+  <p>Chips GPS Anti-Robo y Anti-Extracción con cobertura nacional</p>
+  <a href="https://wa.me/51977717962?text=Hola%2C%20quiero%20información%20sobre%20los%20chips%20GPS%20anti-robo%20y%20anti-extracción" target="_blank" class="btn">
+    Contactar por WhatsApp
+  </a>
+</section>
+
+<!-- SERVICIOS -->
+<section class="section">
+  <h2>🚀 Características del Servicio</h2>
+  <div class="features">
+    <div class="feature">
+      <h3>📍 Rastreo en Tiempo Real</h3>
+      <p>Ubicación exacta del vehículo desde celular o PC, actualizado cada 5 segundos.</p>
+    </div>
+    <div class="feature">
+      <h3>🚨 Chip Anti-Robo</h3>
+      <p>Alertas inmediatas y bloqueo remoto en caso de intento de robo.</p>
+    </div>
+    <div class="feature">
+      <h3>🔒 Anti-Extracción</h3>
+      <p>Detecta cualquier intento de desconexión o manipulación del GPS y notifica al instante.</p>
+    </div>
+    <div class="feature">
+      <h3>📊 Reportes Detallados</h3>
+      <p>Historial de rutas y alertas para control total de tu vehículo o flota.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAPA DE PERÚ -->
+<section class="section">
+  <h2>🗺️ Cobertura Nacional</h2>
+  <div id="map"></div>
+</section>
+
+<!-- INFORMACIÓN GPS -->
+<section class="info-gps">
+  <h2>Información precisa de nuestros chips GPS</h2>
+  <ul>
+    <li>✔ Seguimiento en tiempo real con actualización cada 5 segundos.</li>
+    <li>✔ Alertas inmediatas ante intento de robo o manipulación.</li>
+    <li>✔ Bloqueo remoto del vehículo.</li>
+    <li>✔ Cobertura nacional en todo Perú.</li>
+    <li>✔ Compatible con autos, motos, camiones y flotas.</li>
+  </ul>
+  <a href="https://wa.me/51977717962?text=Hola%2C%20quiero%20información%20sobre%20los%20chips%20GPS%20anti-robo%20y%20anti-extracción" target="_blank" class="btn">
+    Contactar Ahora
+  </a>
+</section>
+
+<footer>
+  <p>© 2026 SecurTrack GPS Perú</p>
+</footer>
+
+<!-- WHATSAPP -->
+<div class="whatsapp-container">
+  <a class="whatsapp" 
+  href="https://wa.me/51977717962?text=Hola%2C%20quiero%20información%20sobre%20los%20chips%20GPS%20anti-robo%20y%20anti-extracción" 
+  target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+  </a>
+  <div class="tooltip">💬 Asesor disponible ahora</div>
+</div>
+
+<!-- LEAFLET JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+// Inicializar mapa centrado en Perú
+var map = L.map('map').setView([-9.19, -75.0152], 5); // Centro aproximado del país
+
+// Capa base OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: 'Map data © OpenStreetMap contributors'
+}).addTo(map);
+
+// Ejemplo de marcadores en ciudades importantes
+var vehicles = [
+  {lat:-12.0464, lon:-77.0428, city:'Lima'},
+  {lat:-16.4090, lon:-71.5375, city:'Arequipa'},
+  {lat:-6.77, lon:-79.84, city:'Trujillo'},
+  {lat:-12.0460, lon:-77.0425, city:'Callao'},
+  {lat:-8.11, lon:-79.03, city:'Chiclayo'}
+];
+
+// Añadir marcadores
+vehicles.forEach(v => {
+  L.marker([v.lat, v.lon]).addTo(map)
+    .bindPopup('Vehículo rastreado en ' + v.city);
+});
+</script>
+
+</body>
+</html>
