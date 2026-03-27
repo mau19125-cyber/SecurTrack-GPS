@@ -1,13 +1,4 @@
 
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>SecurTrack GPS | Protección Vehicular PRO</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Leaflet CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
 <style>
 body {
   margin: 0;
