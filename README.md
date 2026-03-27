@@ -19,7 +19,7 @@ body {
 /* HERO */
 .hero {
   text-align: center;
-  padding: 80px 20px;
+  padding: 180px 120px;
   background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
               url('https://images.unsplash.com/photo-1600320254374-ce2d293c324e') center/cover no-repeat;
 }
