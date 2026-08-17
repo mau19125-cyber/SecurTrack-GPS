@@ -1,1 +1,470 @@
+import { useState, type ReactNode } from "react";
+import {
+  ArrowDown, ArrowRight, BriefcaseBusiness, Crosshair, Eye, LockKeyhole, Orbit, ScanLine, Target,} from "lucide-react";
+const skills = [
+  {
+    key: "Q",
+    name: "Cazador de cabezas",
+    label: "Q / HABILIDAD",
+    icon: Crosshair,
+    text: "Equipa una pistola dorada personalizada. Precisión letal, incluso cuando la economía exige improvisar.",
+  },
+  {
+    key: "E",
+    name: "Rendez-vous",
+    label: "E / FIRMA",
+    icon: Orbit,
+    text: "Coloca dos anclas de teletransporte. Juega el ángulo, consigue el pick y vuelve antes de la respuesta.",
+  },
+  {
+    key: "C",
+    name: "Marca registrada",
+    label: "C / HABILIDAD",
+    icon: ScanLine,
+    text: "Una trampa que ralentiza y revela la intención enemiga. El mapa avisa cuando alguien cruza tu perímetro.",
+  },
+  {
+    key: "X",
+    name: "Tour de Force",
+    label: "X / DEFINITIVA",
+    icon: Target,
+    text: "Invoca un rifle de francotirador artesanal. Un impacto crea una zona que castiga el siguiente paso.",
+  },
+];
 
+function Rail({
+  label,
+  value,
+  accent = false,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between border-b border-[#d7bd73]/15 py-3">
+      <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#8b8c92]">
+        {label}
+      </span>
+
+      <span
+        className={
+          accent
+            ? "font-mono text-xs font-bold tracking-[0.16em] text-[#55e7ee]"
+            : "font-mono text-xs tracking-[0.16em] text-[#e7dfc9]"
+        }
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function Bracket({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`relative ${className}`}>
+      <span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l border-t border-[#d7bd73]/60" />
+      <span className="pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b border-r border-[#d7bd73]/60" />
+      {children}
+    </div>
+  );
+}
+
+export function ChamberHorcus() {
+  const [activeSkill, setActiveSkill] = useState(0);
+  const [briefOpen, setBriefOpen] = useState(false);
+
+  return (
+    <main
+      className="min-h-[100dvh] overflow-hidden bg-[#090d12] text-[#e7dfc9] selection:bg-[#55e7ee] selection:text-[#091016]"
+      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+    >
+      <style>{`
+        :root {
+          color-scheme: dark;
+        }
+
+        @keyframes scan {
+          from {
+            transform: translateY(-100%);
+          }
+
+          to {
+            transform: translateY(100vh);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        @keyframes pulseRing {
+          0%, 100% {
+            opacity: .3;
+            transform: scale(.98);
+          }
+
+          50% {
+            opacity: .65;
+            transform: scale(1.02);
+          }
+        }
+
+        .scanline {
+          animation: scan 8s linear infinite;
+        }
+
+        .float {
+          animation: float 5s ease-in-out infinite;
+        }
+
+        .pulse-ring {
+          animation: pulseRing 4s ease-in-out infinite;
+        }
+
+        .grid-bg {
+          background-image:
+            linear-gradient(rgba(117,153,160,.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(117,153,160,.07) 1px, transparent 1px);
+          background-size: 42px 42px;
+        }
+
+        .image-sheen {
+          background:
+            linear-gradient(
+              115deg,
+              transparent 30%,
+              rgba(85,231,238,.18) 45%,
+              transparent 56%,
+              rgba(215,189,115,.28) 72%,
+              transparent 82%
+            );
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .scanline,
+          .float,
+          .pulse-ring {
+            animation: none;
+          }
+
+          html {
+            scroll-behavior: auto;
+          }
+        }
+      `}</style>
+
+      <div className="fixed inset-0 pointer-events-none opacity-30 grid-bg" />
+
+      <div className="fixed scanline pointer-events-none left-0 right-0 top-0 z-20 h-px bg-[#55e7ee]/30 shadow-[0_0_18px_#55e7ee]" />
+
+      <nav className="relative z-10 mx-auto flex max-w-[1400px] items-center justify-between px-5 py-6 md:px-10">
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="group flex items-center gap-3 text-left"
+          aria-label="Volver al inicio"
+        >
+          <div className="flex h-9 w-9 items-center justify-center border border-[#d7bd73] text-[#d7bd73]">
+            <span className="text-lg font-black">C</span>
+          </div>
+
+          <div>
+            <div className="font-mono text-[11px] font-bold tracking-[0.28em] text-[#f1e9d4]">
+              VALORANT // ARCHIVO
+            </div>
+
+            <div className="font-mono text-[9px] tracking-[0.25em] text-[#70767d]">
+              AGENTE CHAMBER // 044
+            </div>
+          </div>
+        </button>
+
+        <div className="hidden items-center gap-9 font-mono text-[10px] uppercase tracking-[0.24em] text-[#858a91] md:flex">
+          <a className="transition-colors hover:text-[#55e7ee]" href="#perfil">
+            Perfil
+          </a>
+
+          <a className="transition-colors hover:text-[#55e7ee]" href="#arsenal">
+            Habilidades
+          </a>
+
+          <a className="transition-colors hover:text-[#55e7ee]" href="#campo">
+            Expediente
+          </a>
+        </div>
+
+        <button
+          onClick={() => setBriefOpen(!briefOpen)}
+          className="flex items-center gap-2 border border-[#d7bd73]/40 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#d7bd73] transition-all hover:border-[#55e7ee] hover:text-[#55e7ee] focus:outline-none focus:ring-2 focus:ring-[#55e7ee]"
+        >
+          {briefOpen ? "Cerrar" : "Abrir briefing"}
+          <ArrowRight className="h-3 w-3" />
+        </button>
+      </nav>
+
+      {briefOpen && (
+        <div className="relative z-10 mx-5 mb-3 border border-[#55e7ee]/35 bg-[#0d1820]/95 p-4 font-mono text-xs text-[#a4d8d9] md:mx-auto md:max-w-[1320px]">
+          [BRIEFING DEL AGENTE] El objetivo no es entrar primero. Es hacer que cada ángulo cueste.
+        </div>
+      )}
+
+      <section
+        id="perfil"
+        className="relative z-0 mx-auto grid min-h-[680px] max-w-[1400px] items-center gap-10 px-5 pb-20 pt-8 md:grid-cols-[.84fr_1.16fr] md:px-10 md:pt-14"
+      >
+        <div className="relative z-10">
+          <div className="mb-5 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[#55e7ee]">
+            <span className="h-px w-8 bg-[#55e7ee]" />
+            AGENTE // CENTINELA
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#55e7ee] shadow-[0_0_10px_#55e7ee]" />
+          </div>
+
+          <div className="mb-4 flex flex-wrap gap-x-4 gap-y-2 font-mono text-[9px] uppercase tracking-[.22em] text-[#8c969a]">
+            <span>VINCENT FABRON</span>
+            <span className="text-[#d7bd73]">FRANCIA // DOSSIER 044</span>
+          </div>
+
+          <h1 className="font-['Bebas_Neue'] text-[clamp(6rem,17vw,13.5rem)] leading-[.78] tracking-[-.03em] text-[#f1e9d4]">
+            CHAM
+            <br />
+            <span className="text-[#d7bd73]">BER</span>
+          </h1>
+
+          <p className="mt-8 max-w-[500px] border-l-2 border-[#d7bd73] pl-5 text-sm leading-7 text-[#a8a6a0]">
+            Arquitecto de armas francés y especialista en control de mapa.
+            Chamber no espera la ronda: la compra, la ancla y la termina con una firma dorada.
+          </p>
+
+          <div className="mt-9 flex flex-wrap gap-3">
+            <a
+              href="#arsenal"
+              className="group inline-flex items-center gap-3 bg-[#d7bd73] px-6 py-4 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-[#101419] transition-all hover:bg-[#f1e9d4] focus:outline-none focus:ring-2 focus:ring-[#55e7ee]"
+            >
+              Ver habilidades
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </a>
+
+            <a
+              href="#campo"
+              className="inline-flex items-center gap-3 border border-[#758187]/50 px-6 py-4 font-mono text-[10px] uppercase tracking-[0.18em] text-[#b5bec0] transition hover:border-[#55e7ee] hover:text-[#55e7ee]"
+            >
+              Leer expediente
+            </a>
+          </div>
+
+          <div className="mt-14 flex flex-wrap items-center gap-5 font-mono text-[9px] uppercase tracking-[0.19em] text-[#626a70]">
+            <BriefcaseBusiness className="h-4 w-4 text-[#d7bd73]" />
+            ARCHIVO DEL AGENTE
+            <span className="text-[#55e7ee]">PROTOCOLO DE PRECISIÓN</span>
+          </div>
+        </div>
+
+        <div className="relative mx-auto flex h-[500px] w-full max-w-[600px] items-center justify-center">
+          <div className="pulse-ring absolute h-[390px] w-[390px] rounded-full border border-[#d7bd73]/30 shadow-[0_0_100px_rgba(215,189,115,.1)] md:h-[490px] md:w-[490px]" />
+
+          <div className="absolute h-[290px] w-[290px] rounded-full border border-dashed border-[#55e7ee]/25 md:h-[370px] md:w-[370px]" />
+
+          <div className="float absolute bottom-7 right-0 z-10 w-44 border border-[#55e7ee]/30 bg-[#0d151b]/90 p-4 backdrop-blur-md">
+            <div className="mb-3 flex items-center gap-2 font-mono text-[9px] tracking-[.2em] text-[#55e7ee]">
+              <Eye className="h-3 w-3" />
+              LECTURA TÁCTICA
+            </div>
+
+            <div className="font-mono text-[10px] text-[#838e94]">
+              PRECISIÓN
+            </div>
+
+            <div className="mt-1 text-xl font-bold text-[#e7dfc9]">
+              47.2 <small className="text-[9px] text-[#55e7ee]">ms</small>
+            </div>
+
+            <div className="mt-3 h-1 bg-[#26333a]">
+              <div className="h-full w-2/3 bg-[#55e7ee]" />
+            </div>
+          </div>
+
+          <div className="relative h-[410px] w-[285px] overflow-hidden border border-[#d7bd73]/55 bg-[#0c141c] shadow-[0_24px_80px_rgba(0,0,0,.65)] md:h-[500px] md:w-[350px]">
+            <img
+              src="/__mockup/images/chamber-official.png"
+              alt="Chamber, agente Centinela de VALORANT"
+              className="absolute inset-0 h-full w-full object-contain object-center"
+            />
+
+            <div className="image-sheen pointer-events-none absolute inset-0 opacity-70" />
+
+            <div className="pointer-events-none absolute inset-3 border border-[#55e7ee]/20" />
+
+            <div className="absolute bottom-4 left-4 font-mono text-[9px] tracking-[.2em] text-[#d7bd73]">
+              FR // 044-A
+            </div>
+
+            <div className="absolute right-4 top-4 font-mono text-[9px] tracking-[.2em] text-[#55e7ee]">
+              AGENTE ACTIVO
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="campo"
+        className="border-y border-[#d7bd73]/15 bg-[#0c1218]/80 px-5 py-10 md:px-10"
+      >
+        <div className="mx-auto grid max-w-[1320px] gap-8 md:grid-cols-4">
+          <Rail label="ROL" value="CENTINELA" accent />
+          <Rail label="NOMBRE REAL" value="VINCENT FABRON" />
+          <Rail label="ORIGEN" value="FRANCIA" />
+          <Rail label="ESPECIALIDAD" value="CONTROL DE MAPA" />
+        </div>
+      </section>
+
+      <section
+        id="arsenal"
+        className="relative mx-auto max-w-[1400px] px-5 py-24 md:px-10"
+      >
+        <div className="mb-12 flex items-end justify-between">
+          <div>
+            <div className="mb-4 flex items-center gap-2 font-mono text-[10px] tracking-[.28em] text-[#55e7ee]">
+              <LockKeyhole className="h-3 w-3" />
+              02 / HABILIDADES OFICIALES
+            </div>
+
+            <h2 className="font-['Bebas_Neue'] text-5xl tracking-wide text-[#f1e9d4] md:text-7xl">
+              CADA HABILIDAD
+              <br />
+              <span className="text-[#d7bd73]">CIERRA UN ÁNGULO.</span>
+            </h2>
+          </div>
+
+          <Target className="hidden h-12 w-12 text-[#d7bd73]/60 md:block" />
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-4">
+          {skills.map((skill, i) => {
+            const Icon = skill.icon;
+            const active = i === activeSkill;
+
+            return (
+              <button
+                key={skill.key}
+                onClick={() => setActiveSkill(i)}
+                aria-pressed={active}
+                className={`group relative min-h-[250px] border p-5 text-left transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#55e7ee] ${
+                  active
+                    ? "border-[#d7bd73] bg-[#192329]"
+                    : "border-[#758187]/25 bg-[#0d151a] hover:border-[#55e7ee]/70"
+                }`}
+              >
+                <div className="flex items-center justify-between font-mono text-[10px] text-[#69777d]">
+                  <span>
+                    {skill.key} / {skill.label}
+                  </span>
+
+                  <Icon
+                    className={`h-5 w-5 ${
+                      active
+                        ? "text-[#d7bd73]"
+                        : "text-[#68777d] group-hover:text-[#55e7ee]"
+                    }`}
+                  />
+                </div>
+
+                <h3 className="mt-14 font-['Bebas_Neue'] text-3xl tracking-wide text-[#e7dfc9]">
+                  {skill.name}
+                </h3>
+
+                <p className="mt-3 text-xs leading-5 text-[#899398]">
+                  {skill.text}
+                </p>
+
+                <span
+                  className={`absolute bottom-4 right-5 h-px transition-all ${
+                    active
+                      ? "w-12 bg-[#55e7ee]"
+                      : "w-4 bg-[#657178] group-hover:w-12"
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </div>
+
+        <Bracket className="mt-14 grid gap-8 bg-[#0d151a] p-6 md:grid-cols-[1fr_1.5fr] md:p-10">
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[.25em] text-[#55e7ee]">
+              PROTOCOLO DE PRECISIÓN
+            </div>
+
+            <div className="mt-4 font-['Bebas_Neue'] text-4xl text-[#d7bd73]">
+              {skills[activeSkill].name}
+            </div>
+
+            <p className="mt-3 max-w-md text-sm leading-6 text-[#9fa8a8]">
+              {skills[activeSkill].text} La presión empieza antes de que aparezcas.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-8 gap-y-5 font-mono text-[10px] uppercase tracking-[.15em] text-[#879195]">
+            <div>
+              <span className="text-[#d7bd73]">01</span> Economía → comprar tiempo
+            </div>
+
+            <div>
+              <span className="text-[#d7bd73]">02</span> Ritmo → cortar rotaciones
+            </div>
+
+            <div>
+              <span className="text-[#d7bd73]">03</span> Ángulo → negar la entrada
+            </div>
+
+            <div>
+              <span className="text-[#d7bd73]">04</span> Sangre fría → último tiro
+            </div>
+          </div>
+        </Bracket>
+      </section>
+
+      <section className="relative overflow-hidden border-t border-[#d7bd73]/20 bg-[#111b21] px-5 py-24 text-center md:px-10">
+        <div className="absolute left-1/2 top-0 h-px w-1/2 -translate-x-1/2 bg-[#55e7ee]/60" />
+
+        <div className="font-mono text-[10px] tracking-[.3em] text-[#55e7ee]">
+          03 / ARCHIVO COMPLETO
+        </div>
+
+        <h2 className="mx-auto mt-5 max-w-4xl font-['Bebas_Neue'] text-6xl leading-[.85] tracking-wide text-[#f1e9d4] md:text-9xl">
+          EL CAMPO
+          <br />
+          <span className="text-[#d7bd73]">ES TUYO.</span>
+        </h2>
+
+        <p className="mx-auto mt-7 max-w-md text-sm leading-6 text-[#919da0]">
+          Compra con cabeza. Fija tu ancla. Haz que cada rotación pague peaje.
+        </p>
+
+        <a
+          href="#perfil"
+          className="mt-9 inline-flex items-center gap-3 border border-[#d7bd73] px-8 py-4 font-mono text-[10px] font-bold uppercase tracking-[.2em] text-[#d7bd73] transition hover:bg-[#d7bd73] hover:text-[#101419] focus:outline-none focus:ring-2 focus:ring-[#55e7ee]">
+          Volver al perfil
+          <ArrowDown className="h-4 w-4" />
+        </a>
+
+        <div className="mx-auto mt-20 flex max-w-5xl justify-between border-t border-[#758187]/20 pt-5 text-left font-mono text-[9px] uppercase tracking-[.2em] text-[#667176]">
+          <span>CHAMBER // DOSSIER 044</span>
+          <span>VALORANT // CENTINELA</span>
+          <span className="hidden md:block">ARQUITECTO DE ARMAS</span>
+        </div>
+      </section>
+    </main>
+  );
+}
